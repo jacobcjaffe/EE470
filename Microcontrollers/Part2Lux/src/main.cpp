@@ -1,5 +1,5 @@
 /*
-Title: Lux Meter Assignment
+Title: Lux Meter System Assignment
 -----------------------------------------------------
 Program Details: The microcontroller is connected to the photoresistor in series with a resistor, 
   which acts as a voltage divider. The microcontroller looks at that value, and it will play a buzzer and
@@ -17,11 +17,14 @@ Versions:
   V1: Simply outputs the read value from A0. x
   V2: Fully functional system according to the requirements.
 
-File Dependencies: None
+File Dependencies: none
+
 */
 
 #include <Arduino.h>
 #include <cmath> // for use of e in the conversion of the adc value to the actual lux
+
+// Main Program
 
 // outputs
 #define red D1
@@ -31,7 +34,9 @@ File Dependencies: None
 
 // input
 #define pr A0
+
 // functions
+// used to output an rgb value
 void RGBout(int, int, int);
 
 // global variables
@@ -56,7 +61,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   luxVal = analogRead(pr);
-  luxCalc = 2919 * pow(M_E, (float)luxVal * -.015782);
+  luxCalc = 492200 * pow(M_E, (float)luxVal * -.07835) + 3241 * pow(M_E, (float)luxVal * -.01807);
   dtostrf(luxCalc, 4, 3, buffer);
   Serial.println(buffer);
   //Serial.println("integer lux value: " + String(luxVal));
