@@ -14,22 +14,34 @@ OutputS: D1 - controls the red value of the RGB LED with PWM
 Date: September 28, 2025
 Compiler: SCons Build Framework (uses GCC) with PlatformIO
 Versions: 
-  V1: Simply outputs the read value from A0. 
+  V1: Simply outputs the read value from A0. x
+  V2: Fully functional system according to the requirements.
+
+File Dependencies: None
 */
 
 #include <Arduino.h>
+#include <cmath> // for use of e in the conversion of the adc value to the actual lux
+
+// outputs
 #define red D1
 #define green D2
 #define blue D3
 #define buzzer D4
+
+// input
 #define pr A0
 // functions
-int myFunction(int, int);
 void RGBout(int, int, int);
 
 // global variables
 int luxVal;
 int threshold = 0;
+float luxCalc;
+int redVal = 0;
+int blueVal = 0;
+int greenVal = 0;
+char buffer[20];
 
 void setup() {
   // put your setup code here, to run once:
@@ -44,20 +56,39 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   luxVal = analogRead(pr);
-  Serial.println(luxVal);
-  if (luxVal > threshold) {
+  luxCalc = 2919 * pow(M_E, (float)luxVal * -.015782);
+  dtostrf(luxCalc, 4, 3, buffer);
+  Serial.println(buffer);
+  //Serial.println("integer lux value: " + String(luxVal));
+  if(Serial.availableForWrite()) {
+    String msg = Serial.readStringUntil('\n');
+    // if B is input from serial, buzz for 5 seconds
+    if (msg[0] == 'B') {
+      digitalWrite(buzzer, 1);
+      delay(5000);
+      digitalWrite(buzzer, 0);
+    }
 
   }
-  else {
-
+  // vary intensity of red in the LED with the lux over 150 
+  if (luxCalc > 150) {
+    digitalWrite(buzzer, 0);
+    redVal = (int)(255 * (luxCalc / 700));
+    // clamp red value to 255
+    if (redVal > 255) {
+      redVal = 255;
+    }
+    greenVal = 255 - redVal;
+    blueVal = 255 - redVal;
+    RGBout(redVal, blueVal, greenVal);
   }
-  delay(1500);
+  else { // if lux is below 300, display white LED and play buzzer.
+    digitalWrite(buzzer, 1);
+    RGBout(255, 255, 255);
+  }
+  //delay(1500);
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
 
 // a function to control the RGB LED module. The analog write uses a PWM signal to control
 // the color of the LED. 
