@@ -78,7 +78,7 @@ void loop() {
   // vary intensity of red in the LED with the lux over 150 
   if (luxCalc > 150) {
     digitalWrite(buzzer, 0);
-    redVal = (int)(255 * (luxCalc / 700));
+    redVal = (int)(255 * (luxCalc / 1200));
     // clamp red value to 255
     if (redVal > 255) {
       redVal = 255;
@@ -87,7 +87,7 @@ void loop() {
     blueVal = 255 - redVal;
     RGBout(redVal, blueVal, greenVal);
   }
-  else { // if lux is below 300, display white LED and play buzzer.
+  else { // if lux is below 150, display white LED and play buzzer.
     digitalWrite(buzzer, 1);
     RGBout(255, 255, 255);
   }
