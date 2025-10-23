@@ -1,4 +1,13 @@
+
 <?php
+    // Overview: A program that inserts data into the sensor_data table. It uses my credentials to log in, then looks 
+    // at the URL for the parameters. If the query parameters are base64 encoded, it will attempt to do so. Then it pushes
+    // if all humidity, temperature, and node_name are present. Time received is optional, and if not present, it will use
+    // the present time.
+    // Author: Jacob Jaffe
+    // Input: humidity, temperature, and node_name. time_received is optional
+    // Output: none
+    // Date: 10/14/2025
 
 	echo "<h3>Trying to insert value...</h3>";
 	//database
