@@ -1,3 +1,13 @@
+<!--
+Name: LED Control
+Author: Jacob Jaffe
+Date: November 2, 2025
+Description: This program controls the value in results.txt using two buttons. These buttons represent on and off,
+and the value of the one last pressed will be written to results.txt for the ESP to then read the value of. The page
+queries the value in results.txt every 3 seconds so if someone else changes it, the correct value is displayed.
+Input: on/off buttons
+Output: text "on" or "off" in results.txt
+!-->
 <!DOCTYPE html>
 <html>
 <head>

@@ -1,3 +1,13 @@
+<!--
+Name: RGB
+Author: Jacob Jaffe
+Date: November 2, 2025
+Description: This program controls the rgb values of the rgb LED on an ESP8266-12E. There are three sliders with values
+from 0-255. When the submit button is pressed, these three values are written to rgb.txt, with a ',' delimiter between
+them. These values are then read by the ESP8266 through a HTTP GET request. 
+Input: r, g, and b value sliders
+Output: three integers for r, g, and b written to rgb.txt
+!-->
 <!DOCTYPE html>
 <html>
 <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
