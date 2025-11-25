@@ -1,18 +1,22 @@
 //-----------------------------
-// Title: MQTT
+// Title: MQTT Assignment
 //-----------------------------
-// Program Details:
+// Program Details
 //-----------------------------
-// Purpose: Conenct to broker.mqtt-dashboard.com, Publish and subscribe
+// Purpose: Conenct to broker.mqtt-dashboard.com, publish the status of the switch when the 
+//     switch changes values, publish volts from the wiper of the potentiometer every 10 seconds,
+//     and subscribe to a topic to change the status of an LED. 
 // Dependencies: Make sure you have installed PubSubClient.h
-// Compiler: PIO Version 1.72.0
-// Atuhor: Originally an example called ESP8266-mqtt / slightly modified and cleaned up by Farid Farahmand
-// OUTPUT: publishes 1,2,3,.... on outTopic every publishTimeInterval
-// INPUT: Received value from the broker on inTopic  
+// Compiler: PlatformIO version 6.1.19
+// Author: Jacob Jaffe
+// OUTPUT: publishes the volts at the wiper of the potentiometer read from A0 with message format "volts: (volts to 2 decimal places)"
+//    Additionally publishes a "0" or "1" for the output of the switch on D0. Also outputs the binary value received for the LED.
+//    on GPIO pin D1.      
+// INPUT: Received value from the broker to update the output of the LED.
 // SETUP: To see the published values go to http://www.hivemq.com/demos/websocket-client/ 
-//        subscribe to inTopic and outTopic. You can also create an APP using MQTT Dash
+//        subscribe to inTopic and outTopic.
 // Versions: 
-//  v1: Nov-24-2022 - Cleaned up version 
+//  v1: Nov-25-2025: It all works
 //-----------------------------
 
 #include <Arduino.h>
