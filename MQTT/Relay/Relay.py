@@ -17,7 +17,7 @@ import mysql.connector
 
 HOST = "185.212.71.102"
 USER = "u719884646_MQTT"
-PASSWORD = "EEatSSU470"
+PASSWORD = ""
 DATABASE = "u719884646_MQTT"
 
 def push(sensorValue):
