@@ -25,13 +25,15 @@
 #define POT A0
 
 // WiFi variables
-const char* ssid = "xxxxxxxxxxxxxx";  // Enter your WiFi name
-const char* password = "yyyyyyyyyyy";  // Enter WiFi password
+const char* ssid = "iPhone (4)";  // Enter your WiFi name
+const char* password = "eeatssu470";  // Enter WiFi password
 
 // MQTT variables
 const char* mqtt_server = "broker.mqtt-dashboard.com";
-const char* publishTopic = "xxxxxxxxxxxx";   // outTopic where ESP publishes
-const char* subscribeTopic = "aaaaaaaaaaaaaaaaaa";  // inTopic where ESP has subscribed to
+// out topics where ESP publishes
+const char* POTTopic = "testtopic/temp/outTopic/pot";
+const char* SWITCHTopic = "testtopic/temp/outTopic/switch";
+const char* subscribeTopic = "testtopic/temp/inTopic";  // inTopic where ESP has subscribed to
 #define publishTimeInterval 10000 // in seconds 
 
 // Definitions 
@@ -40,7 +42,6 @@ unsigned long lastMsg = 0;
 #define BUILTIN_LED 2 // built-in LED
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
-int ledStatus = 0;
 
 WiFiClient espClient;
 PubSubClient client(espClient); // define MQTTClient 
@@ -79,7 +80,6 @@ void callback(char* topic, byte* payload, int length) {
   }
   Serial.println();
   // Switch on the LED if an 1 was received as first character
-  // add your code here
   if ((char)payload[0] == '1') {
     digitalWrite(LED, 1);
   }
@@ -115,17 +115,19 @@ void reconnect() {
 void setup() {
   pinMode(LED, OUTPUT);     // Initialize the BUILTIN_LED pin as an output
   pinMode(POT, INPUT);
+  pinMode(SWITCH, INPUT);
   Serial.begin(9600);
   setup_wifi();
-  client.setServer(mqtt_server, 8883);
+  client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 }
 //------------------------------------------
 float volts;
 void getPot() {
-  volts = analogRead(POT);
+  volts = analogRead(POT) * 3.3 / 1023;
 }
-
+//------------------------------------------
+bool switchPressed = false; // keeping track of last value of switch read
 void loop() {
 
   if (!client.connected()) {
@@ -133,15 +135,34 @@ void loop() {
   }
   client.loop();
 
-  // Publish to outTopic 
+  if (digitalRead(SWITCH)) {
+    // if switch is being held down, no need to publish again
+    if (!switchPressed) {
+      snprintf(msg, MSG_BUFFER_SIZE, "1");
+      Serial.println("Switch has been pressed");
+      client.publish(SWITCHTopic, msg);
+    }
+    switchPressed = true;
+  }
+  else { // switch is off
+    // only need to publish when switch changes from 1 to 0
+    if (switchPressed) {
+      snprintf(msg, MSG_BUFFER_SIZE, "0");
+      Serial.println("Switch has been pressed");
+      client.publish(SWITCHTopic, msg);      
+    }
+    switchPressed = false;
+  }
+
+  // Publish to POTTopic every 10 seconds, recording the voltage
   unsigned long now = millis(); 
   if (now - lastMsg > publishTimeInterval) {
     lastMsg = now;
     getPot();
     ++value;
-    snprintf (msg, MSG_BUFFER_SIZE, "Number # %.2f", volts); // prints Number # 1, Number # 2, .....
+    snprintf (msg, MSG_BUFFER_SIZE, "volts: %.2f", volts); // prints Number # 1, Number # 2, .....
     Serial.print("Publish message: ");
     Serial.println(msg);
-    client.publish(publishTopic, msg);
+    client.publish(POTTopic, msg);
   }
 }
