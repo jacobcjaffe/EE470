@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Dashboard Stuff</title>
+	<style type="text/css">
+		#chart-container {
+			width: 640px;
+			height: auto;
+		}
+	</style>
+</head>
+<body>
+	<header>
+		<h1>Sensor Register and Data</h1>
+	</header>
+
+	<div id="chart-container">
+	<canvas id="mycanvas"></canvas>
+	</div>
+
+	<!-- javascript -->
+	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+	<!-- This is the location of app.js file - we are assuming it is in the same folder as this file-->
+	<script type="text/javascript" src="app.js"></script>
+
+
+</body>
+</html>
