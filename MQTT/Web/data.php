@@ -5,7 +5,7 @@ header('Content-Type: application/json');
 //database
 define('DB_HOST', 'localhost');
 define('DB_USERNAME', 'u719884646_MQTT');
-define('DB_PASSWORD', 'EEatSSU470');
+define('DB_PASSWORD', '');
 define('DB_NAME', 'u719884646_MQTT');
 
 //get connection
